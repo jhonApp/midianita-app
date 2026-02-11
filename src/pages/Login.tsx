@@ -3,8 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Star, Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-const MASONRY_IMAGES_COL_1 = ["https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1000&auto=format&fit=crop", "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1000&auto=format&fit=crop", "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1000&auto=format&fit=crop"];
-const MASONRY_IMAGES_COL_2 = ["https://images.unsplash.com/photo-1621574539437-4b7b480f6dd7?q=80&w=1000&auto=format&fit=crop", "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1000&auto=format&fit=crop", "https://images.unsplash.com/photo-1507643179173-39db3ffde235?q=80&w=1000&auto=format&fit=crop"];
+
+// Import local images
+import img3 from "../assets/3.png";
+import img6 from "../assets/6.png";
+import img22 from "../assets/22.png";
+import img35 from "../assets/35.png";
+import img50 from "../assets/50.png";
+import imgPortugues from "../assets/portugues3.png";
+const MASONRY_IMAGES_COL_1 = [img3, img22, img50];
+const MASONRY_IMAGES_COL_2 = [img6, img35, imgPortugues];
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,11 +36,11 @@ const Login = () => {
       toast.error("Credenciais inválidas");
     }
   };
-  return <div className="flex min-h-screen bg-background">
+  return <div className="flex h-screen w-full bg-background overflow-hidden">
       {/* --- LADO ESQUERDO: FORMULÁRIO --- */}
-      <div className="relative flex w-full flex-col justify-center px-8 sm:px-16 lg:w-1/2 lg:px-24">
+      <div className="flex w-full lg:w-1/2 h-full flex-col justify-center items-center px-8 relative z-10 bg-[#111521]">
         {/* Logo Area */}
-        <div className="mx-auto w-full max-w-md">
+        <div className="w-full max-w-[580px]">
           <div className="mb-10 flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-foreground">
@@ -46,7 +54,7 @@ const Login = () => {
 
           {/* Heading */}
           <div className="mb-8">
-            <h1 className="mb-3 text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
+            <h1 className="mb-3 text-4xl font-bold leading-tight tracking-tight text-foreground lg:text-5xl">
               Sua criatividade,
               <br />
               potencializada.
@@ -70,7 +78,7 @@ const Login = () => {
           {/* Divider */}
           <div className="mb-6 flex items-center gap-4">
             <div className="h-px flex-1 bg-border" />
-            <span className="text-xs font-medium text-muted-foreground">ou entre com e-mail</span>
+            <span className="text-base font-medium text-muted-foreground">ou entre com e-mail</span>
             <div className="h-px flex-1 bg-border" />
           </div>
 
@@ -116,18 +124,18 @@ const Login = () => {
       </div>
 
       {/* --- LADO DIREITO: VISUAL MASONRY GRID --- */}
-      <div className="relative hidden overflow-hidden lg:block lg:w-1/2">
+      <div className="relative hidden h-full overflow-hidden lg:block lg:w-1/2">
         {/* Glow Effects */}
         <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-primary/20 blur-[128px]" />
         <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-accent/10 blur-[128px]" />
 
         {/* Masonry Container */}
-        <div className="flex h-full items-center justify-center p-8">
-          <div className="-rotate-12 flex gap-6">
+        <div className="flex h-full items-center justify-center p-8 -ml-32">
+          <div className="-rotate-12 flex gap-6 scale-110">
             {/* Coluna 1 */}
             <div className="-mt-24 flex flex-col gap-6">
               {MASONRY_IMAGES_COL_1.map((src, i) => <div key={i} className="relative overflow-hidden rounded-2xl shadow-2xl opacity-50">
-                  <img src={src} alt="" className="h-72 w-56 object-cover" />
+                  <img src={src} alt="" className="h-96 w-96 object-cover" />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40" />
                 </div>)}
             </div>
@@ -135,7 +143,7 @@ const Login = () => {
             {/* Coluna 2 */}
             <div className="mt-12 flex flex-col gap-6">
               {MASONRY_IMAGES_COL_2.map((src, i) => <div key={i} className="relative overflow-hidden rounded-2xl shadow-2xl opacity-50">
-                  <img src={src} alt="" className="h-72 w-56 object-cover" />
+                  <img src={src} alt="" className="h-96 w-96 object-cover" />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40" />
                 </div>)}
             </div>
@@ -144,15 +152,15 @@ const Login = () => {
 
         {/* Card Flutuante (Testimonial) */}
         <div className="absolute bottom-1/3 left-1/2 z-10 -translate-x-1/2">
-          <div className="relative overflow-hidden rounded-2xl border border-border bg-card/80 shadow-2xl backdrop-blur-xl px-[30px] py-[35px]">
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-card/80 shadow-2xl backdrop-blur-xl px-[50px] py-[50px]">
             {/* Shine decorativo */}
             <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-primary/10 blur-2xl" />
 
             <div className="relative space-y-3">
               <div className="flex gap-1">
-                {[1, 2, 3, 4, 5].map(s => <Star key={s} className="h-4 w-4 fill-yellow-400 text-yellow-400" />)}
+                {[1, 2, 3, 4, 5].map(s => <Star key={s} className="h-6 w-6 fill-yellow-400 text-yellow-400" />)}
               </div>
-              <p className="max-w-xs text-sm italic text-foreground/90">
+              <p className="max-w-xs text-base italic text-foreground/90">
                 "Gerei a arte do culto de domingo em 30 segundos. A qualidade é impressionante."
               </p>
               <div className="flex items-center gap-3">
