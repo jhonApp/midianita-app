@@ -10,6 +10,8 @@ import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Gallery from "./pages/Gallery";
 import Schedule from "./pages/Schedule";
+import GenerativeHome from "./pages/GenerativeHome";
+import SynthesisState from "./pages/SynthesisState";
 import DashboardLayout from "./components/DashboardLayout";
 import Editor from "./pages/Editor";
 import NotFound from "./pages/NotFound";
@@ -35,6 +37,8 @@ const App = () => (
                 <Route path="/dashboard/gallery" element={<Gallery />} />
               <Route path="/dashboard/schedule" element={<Schedule />} />
               </Route>
+              <Route path="/ai-create" element={<GenerativeHome />} />
+              <Route path="/ai-synthesis" element={<SynthesisState />} />
               <Route path="/editor" element={<Editor />} />
             </Route>
 
