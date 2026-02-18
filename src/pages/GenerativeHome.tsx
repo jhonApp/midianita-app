@@ -1,219 +1,244 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Sparkles, Church, Users, BookOpen, Plus } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import {
+  ChevronLeft,
+  Square,
+  Layers,
+  Smartphone,
+  Sparkles,
+  BookOpen,
+  Calendar,
+  Bell,
+  MessageSquare,
+  Sun,
+  Users,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Starter template cards
-const STARTER_TEMPLATES = [
+type FormatId = "post" | "carousel" | "story";
+
+const FORMATS = [
   {
-    id: "sunday-service",
-    title: "Sunday Service",
-    description: "Create slides and social posts for worship and announcements.",
-    icon: Church,
-    gradient: "from-blue-500/20 to-purple-500/20",
-    iconColor: "text-blue-400",
+    id: "post" as FormatId,
+    icon: Square,
+    label: "Post Único",
+    description: "Imagem estática 1:1 ou 4:5",
   },
   {
-    id: "youth-event",
-    title: "Youth Event",
-    description: "Design high-energy flyers and stories for your youth ministry.",
-    icon: Users,
-    gradient: "from-purple-500/20 to-pink-500/20",
-    iconColor: "text-purple-400",
+    id: "carousel" as FormatId,
+    icon: Layers,
+    label: "Carrossel",
+    description: "Sequência de slides deslizáveis",
   },
   {
-    id: "verse-day",
-    title: "Verse of the Day",
-    description: "Generate beautiful scripture visuals for daily inspiration.",
-    icon: BookOpen,
-    gradient: "from-emerald-500/20 to-teal-500/20",
-    iconColor: "text-emerald-400",
+    id: "story" as FormatId,
+    icon: Smartphone,
+    label: "Story / Reels",
+    description: "Formato vertical 9:16",
   },
 ];
 
-// Recent work items (placeholder data)
-const RECENT_WORK = [
-  {
-    id: 1,
-    title: "Sunday Worship Slides",
-    thumbnail: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=300&fit=crop",
-    date: "2 days ago",
-  },
-  {
-    id: 2,
-    title: "Youth Night Flyer",
-    thumbnail: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=300&fit=crop",
-    date: "5 days ago",
-  },
-  {
-    id: 3,
-    title: "Psalm 23 Social",
-    thumbnail: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop",
-    date: "1 week ago",
-  },
-  {
-    id: 4,
-    title: "Food Drive Banner",
-    thumbnail: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=300&fit=crop",
-    date: "1 week ago",
-  },
+const POST_DIMENSIONS = ["Quadrado (1:1)", "Retrato (4:5)"];
+const CAROUSEL_SLIDES = ["4 Slides", "7 Slides", "10 Slides"];
+const LANGUAGES = ["Português (Brasil)", "English", "Español"];
+
+const EXAMPLE_PROMPTS = [
+  { id: 1, icon: BookOpen,      text: "Resumo da Pregação de Domingo sobre Fé." },
+  { id: 2, icon: Users,         text: "Convite para o Culto de Jovens (Sábado)." },
+  { id: 3, icon: Sun,           text: "Versículo do Dia: Salmos 23." },
+  { id: 4, icon: Calendar,      text: "Agenda da Semana da Igreja." },
+  { id: 5, icon: Bell,          text: "Aviso importante: Escola Bíblica." },
+  { id: 6, icon: MessageSquare, text: "Carrossel explicativo: 5 passos para orar." },
 ];
 
 const GenerativeHome = () => {
-  const [prompt, setPrompt] = useState("");
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const [selectedFormat, setSelectedFormat] = useState<FormatId>("post");
+  const [selectedDimension, setSelectedDimension] = useState("Quadrado (1:1)");
+  const [selectedSlides, setSelectedSlides] = useState("7 Slides");
+  const [selectedLanguage, setSelectedLanguage] = useState("Português (Brasil)");
+  const [prompt, setPrompt] = useState("");
 
   const handleGenerate = () => {
     if (prompt.trim()) {
-      // Navigate to synthesis/loading state with the prompt
-      navigate("/ai-synthesis", { state: { prompt } });
+      navigate("/ai-synthesis", { state: { prompt, format: selectedFormat } });
     }
   };
 
-  const handleTemplateClick = (template: typeof STARTER_TEMPLATES[0]) => {
-    // Pre-fill the prompt based on template
-    const templatePrompts = {
-      "sunday-service": "Create a modern worship slide for Sunday service",
-      "youth-event": "Design a high-energy flyer for youth night event",
-      "verse-day": "Generate a beautiful visual for Psalm 23:1",
-    };
-    setPrompt(templatePrompts[template.id as keyof typeof templatePrompts] || "");
-  };
-
   return (
-    <div className="flex-1 w-full h-full overflow-y-auto bg-[#0B0E14] scrollbar-custom">
-      {/* Header */}
-      <header className="border-b border-white/[0.06] px-8 py-4">
-        <div className="max-w-[1600px] mx-auto flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-primary-foreground"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                <path d="M2 17l10 5 10-5" />
-                <path d="M2 12l10 5 10-5" />
-              </svg>
-            </div>
-            <span className="text-xl font-bold text-white">Midianita</span>
-          </div>
+    <div className="flex h-full flex-col bg-[#0B0E14] overflow-y-auto scrollbar-thin">
 
-          {/* Nav Links & Avatar */}
-          <div className="flex items-center gap-6">
-            <button className="text-sm text-slate-400 hover:text-white transition-colors">
-              Templates
-            </button>
-            <button className="text-sm text-slate-400 hover:text-white transition-colors">
-              Library
-            </button>
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/20 text-sm font-bold text-primary">
-              {user?.name ? user.name.substring(0, 2).toUpperCase() : "MM"}
-            </div>
+      {/* Header */}
+      <header className="shrink-0 border-b border-white/5">
+        <div className="relative max-w-6xl mx-auto flex items-center justify-center px-10 py-10">
+          {/* Back button — absolutely pinned left */}
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="absolute left-0 flex items-center gap-2 rounded-lg px-4 py-2 text-slate-400 hover:bg-white/5 hover:text-white transition-all"
+          >
+            <ChevronLeft className="h-6 w-6" />
+            <span className="text-lg font-medium">Voltar</span>
+          </button>
+
+          {/* Title block — perfectly centered */}
+          <div className="text-center flex flex-col gap-3">
+            <h1 className="text-5xl font-extrabold text-white tracking-tight">Novo Design</h1>
+            <p className="text-xl text-slate-400">O que você gostaria de criar hoje?</p>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-[1200px] mx-auto px-8 py-20">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-6xl font-bold text-white mb-8">
-            Design for <span className="text-blue-500">Ministry</span>
-          </h1>
+      <main className="flex-1 max-w-6xl mx-auto w-full px-10 py-14 flex flex-col gap-10">
 
-          {/* Glassmorphic Search Bar */}
-          <div className="relative max-w-3xl mx-auto">
-            <div className="relative flex items-center bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-2xl hover:border-white/20 transition-colors">
-              <Search className="absolute left-6 h-5 w-5 text-slate-500" />
-              <input
-                type="text"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleGenerate()}
-                placeholder="What are we designing for your ministry today?"
-                className="flex-1 bg-transparent border-none outline-none pl-14 pr-4 py-4 text-base text-white placeholder:text-slate-500"
-              />
+        {/* 1. Format Selector — massive cards */}
+        <section className="grid grid-cols-3 gap-6">
+          {FORMATS.map((fmt) => {
+            const isActive = selectedFormat === fmt.id;
+            return (
+              <button
+                key={fmt.id}
+                onClick={() => setSelectedFormat(fmt.id)}
+                className={cn(
+                  "flex flex-col items-center justify-center gap-4 rounded-2xl border h-44 transition-all duration-200",
+                  isActive
+                    ? "border-blue-500 bg-blue-500/10 shadow-xl shadow-blue-500/10"
+                    : "border-white/[0.06] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.05]"
+                )}
+              >
+                <div
+                  className={cn(
+                    "flex h-16 w-16 items-center justify-center rounded-2xl transition-colors",
+                    isActive ? "bg-blue-500/20" : "bg-white/5"
+                  )}
+                >
+                  <fmt.icon
+                    className={cn(
+                      "h-8 w-8 transition-colors",
+                      isActive ? "text-blue-400" : "text-slate-400"
+                    )}
+                  />
+                </div>
+                <div className="text-center px-4">
+                  <p className={cn(
+                    "text-xl font-bold transition-colors",
+                    isActive ? "text-white" : "text-slate-300"
+                  )}>
+                    {fmt.label}
+                  </p>
+                  <p className="text-sm text-slate-500 mt-1">{fmt.description}</p>
+                </div>
+              </button>
+            );
+          })}
+        </section>
+
+        {/* 2. Parameters Bar */}
+        <section className="flex flex-wrap items-center gap-3">
+          {/* Dimension — Post only */}
+          {selectedFormat === "post" && (
+            <div className="relative">
+              <select
+                value={selectedDimension}
+                onChange={(e) => setSelectedDimension(e.target.value)}
+                className="appearance-none cursor-pointer rounded-full border border-white/10 bg-white/5 px-6 h-12 pr-10 text-sm text-slate-300 hover:bg-white/10 hover:border-white/20 transition-colors outline-none"
+              >
+                {POST_DIMENSIONS.map((d) => (
+                  <option key={d} value={d} className="bg-[#1a1d24]">{d}</option>
+                ))}
+              </select>
+              <ChevronLeft className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 -rotate-90 text-slate-500" />
+            </div>
+          )}
+
+          {/* Locked 9:16 — Story */}
+          {selectedFormat === "story" && (
+            <span className="flex items-center rounded-full border border-white/10 bg-white/5 px-6 h-12 text-sm text-slate-400 cursor-default">
+              9:16 (Story / Reels)
+            </span>
+          )}
+
+          {/* Slides — Carousel only */}
+          {selectedFormat === "carousel" && (
+            <div className="relative">
+              <select
+                value={selectedSlides}
+                onChange={(e) => setSelectedSlides(e.target.value)}
+                className="appearance-none cursor-pointer rounded-full border border-white/10 bg-white/5 px-6 h-12 pr-10 text-sm text-slate-300 hover:bg-white/10 hover:border-white/20 transition-colors outline-none"
+              >
+                {CAROUSEL_SLIDES.map((s) => (
+                  <option key={s} value={s} className="bg-[#1a1d24]">{s}</option>
+                ))}
+              </select>
+              <ChevronLeft className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 -rotate-90 text-slate-500" />
+            </div>
+          )}
+
+          {/* Language — always */}
+          <div className="relative">
+            <select
+              value={selectedLanguage}
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+              className="appearance-none cursor-pointer rounded-full border border-white/10 bg-white/5 px-6 h-12 pr-10 text-sm text-slate-300 hover:bg-white/10 hover:border-white/20 transition-colors outline-none"
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l} value={l} className="bg-[#1a1d24]">{l}</option>
+              ))}
+            </select>
+            <ChevronLeft className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 -rotate-90 text-slate-500" />
+          </div>
+        </section>
+
+        {/* 3. Prompt Input — centerpiece */}
+        <section>
+          <div className="relative rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:border-white/20 focus-within:border-blue-500/40 transition-colors">
+            <textarea
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleGenerate();
+              }}
+              placeholder="Descreva o tema, versículo ou ideia do post..."
+              rows={6}
+              className="w-full resize-none bg-transparent px-8 pt-8 pb-20 text-2xl text-white placeholder:text-slate-700 outline-none scrollbar-thin leading-relaxed"
+            />
+            <div className="absolute bottom-5 right-5 flex items-center gap-3">
+              <span className="text-xs text-slate-600 hidden sm:block">⌘ + Enter para gerar</span>
               <button
                 onClick={handleGenerate}
                 disabled={!prompt.trim()}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 disabled:cursor-not-allowed px-6 py-3 rounded-xl text-white font-semibold transition-colors"
+                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-8 h-12 text-sm font-bold text-white shadow-lg shadow-blue-600/20 hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
-                <Sparkles className="h-4 w-4" />
-                Generate
+                <Sparkles className="h-5 w-5" />
+                Gerar com IA
               </button>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Starter Templates */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
-          {STARTER_TEMPLATES.map((template) => (
-            <button
-              key={template.id}
-              onClick={() => handleTemplateClick(template)}
-              className="group text-left p-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.05] transition-all"
-            >
-              <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${template.gradient} mb-4`}>
-                <template.icon className={`h-6 w-6 ${template.iconColor}`} />
-              </div>
-              <h3 className="text-lg font-bold text-white mb-2">{template.title}</h3>
-              <p className="text-sm text-slate-400">{template.description}</p>
-            </button>
-          ))}
-        </div>
-
-        {/* Recent Work */}
-        <div>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-sm uppercase tracking-wider text-slate-500 font-semibold">
-              RECENT WORK
-            </h2>
-            <button className="text-sm text-blue-500 hover:text-blue-400 transition-colors">
-              View all
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {RECENT_WORK.map((item) => (
-              <div
-                key={item.id}
-                className="group cursor-pointer rounded-xl overflow-hidden border border-white/[0.06] hover:border-white/20 transition-colors"
+        {/* 4. Example Prompts */}
+        <section className="pb-8">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-5">
+            Exemplos de prompts
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {EXAMPLE_PROMPTS.map((example) => (
+              <button
+                key={example.id}
+                onClick={() => setPrompt(example.text)}
+                className="group flex items-start gap-4 rounded-xl border border-white/5 bg-white/5 p-6 text-left hover:bg-white/10 hover:border-white/15 transition-all cursor-pointer"
               >
-                <div className="aspect-[4/3] relative overflow-hidden bg-slate-800">
-                  <img
-                    src={item.thumbnail}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors mt-0.5">
+                  <example.icon className="h-5 w-5 text-blue-400 group-hover:text-blue-300 transition-colors" />
                 </div>
-                <div className="p-3 bg-white/[0.02]">
-                  <p className="text-sm font-medium text-white truncate">{item.title}</p>
-                  <p className="text-xs text-slate-500">{item.date}</p>
-                </div>
-              </div>
+                <span className="text-base text-slate-400 group-hover:text-slate-200 transition-colors leading-snug">
+                  {example.text}
+                </span>
+              </button>
             ))}
-
-            {/* New Project Card */}
-            <button className="group rounded-xl border-2 border-dashed border-white/10 hover:border-white/30 bg-white/[0.02] hover:bg-white/[0.05] transition-all aspect-[4/3] flex flex-col items-center justify-center">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors mb-3">
-                <Plus className="h-6 w-6 text-slate-400 group-hover:text-white transition-colors" />
-              </div>
-              <span className="text-sm text-slate-400 group-hover:text-white transition-colors font-medium">
-                New Project
-              </span>
-            </button>
           </div>
-        </div>
+        </section>
+
       </main>
     </div>
   );

@@ -79,38 +79,38 @@ const AICreatePanel = ({ onFormatChange, onGenerate }: AICreatePanelProps) => {
   };
 
   return (
-    <div className="flex h-full w-[300px] shrink-0 flex-col border-r border-white/[0.06] bg-[#1a1d24]">
+    <div className="flex h-full w-[360px] shrink-0 flex-col border-r border-white/[0.06] bg-[#1a1d24]">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4">
+      <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-blue-400" />
-          <span className="text-sm font-semibold text-white">AI Create</span>
+          <Sparkles className="h-5 w-5 text-blue-400" />
+          <span className="text-base font-semibold text-white">AI Create</span>
         </div>
         <button className="text-slate-500 hover:text-white transition-colors">
-          <X className="h-4 w-4" />
+          <X className="h-5 w-5" />
         </button>
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 scrollbar-thin">
         {/* FORMAT SELECTION */}
         <section>
-          <h3 className="mb-3 text-[11px] font-bold uppercase tracking-widest text-slate-500">
+          <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-slate-500">
             Formato
           </h3>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-4">
             {FORMATS.map((fmt) => (
               <button
                 key={fmt.id}
                 onClick={() => handleFormatSelect(fmt.id, fmt.ratio)}
                 className={cn(
-                  "flex flex-col items-center gap-1.5 rounded-lg border p-3 transition-all text-xs",
+                  "flex flex-col items-center gap-2 rounded-lg border p-4 h-24 transition-all text-sm",
                   selectedFormat === fmt.id
                     ? "border-blue-500 bg-blue-600/20 text-blue-400"
                     : "border-white/[0.06] bg-white/[0.03] text-slate-400 hover:border-white/10 hover:text-slate-300"
                 )}
               >
-                <fmt.icon className="h-5 w-5" />
+                <fmt.icon className="h-6 w-6" />
                 <span className="whitespace-nowrap">{fmt.label}</span>
               </button>
             ))}
@@ -120,18 +120,18 @@ const AICreatePanel = ({ onFormatChange, onGenerate }: AICreatePanelProps) => {
         {/* REFERENCE FILES */}
         <section>
           <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">
               Arquivos de Referência
             </h3>
-            <span className="text-[11px] text-slate-600">
+            <span className="text-sm text-slate-600">
               {uploads.length}/5
             </span>
           </div>
 
           {/* Dropzone */}
-          <label className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-dashed border-slate-700 bg-white/[0.02] px-4 py-5 transition-colors hover:border-slate-600">
-            <CloudUpload className="h-6 w-6 text-slate-500" />
-            <p className="text-center text-xs text-slate-500">
+          <label className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border border-dashed border-slate-700 bg-white/[0.02] px-4 h-32 justify-center transition-colors hover:border-slate-600">
+            <CloudUpload className="h-8 w-8 text-slate-500" />
+            <p className="text-center text-sm text-slate-500">
               Arraste imagens ou{" "}
               <span className="font-medium text-blue-400">faça upload</span>
             </p>
@@ -140,7 +140,7 @@ const AICreatePanel = ({ onFormatChange, onGenerate }: AICreatePanelProps) => {
 
           {/* Thumbnails */}
           {uploads.length > 0 && (
-            <div className="mt-3 flex gap-2">
+            <div className="mt-4 flex gap-3">
               {uploads.map((url, i) => (
                 <div key={i} className="group relative">
                   <img
@@ -162,25 +162,25 @@ const AICreatePanel = ({ onFormatChange, onGenerate }: AICreatePanelProps) => {
 
         {/* BRANDING & COLORS */}
         <section>
-          <h3 className="mb-3 text-[11px] font-bold uppercase tracking-widest text-slate-500">
+          <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-slate-500">
             Branding & Cores
           </h3>
 
           {/* Extract button */}
-          <button className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-4 py-2.5 text-sm text-slate-300 transition-colors hover:bg-white/[0.06]">
-            <Pipette className="h-4 w-4" />
+          <button className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-4 h-11 text-base text-slate-300 transition-colors hover:bg-white/[0.06]">
+            <Pipette className="h-5 w-5" />
             Extrair da Imagem
           </button>
 
           {/* Style presets */}
-          <p className="mb-2 text-xs text-slate-500">Estilos Predefinidos</p>
-          <div className="mb-4 flex flex-wrap gap-2">
+          <p className="mb-3 text-sm text-slate-500">Estilos Predefinidos</p>
+          <div className="mb-4 flex flex-wrap gap-3">
             {STYLE_PRESETS.map((preset) => (
               <button
                 key={preset.id}
                 onClick={() => setSelectedPreset(preset.id)}
                 className={cn(
-                  "rounded-full border px-3 py-1 text-xs transition-all",
+                  "rounded-full border px-4 py-2 text-sm transition-all",
                   selectedPreset === preset.id
                     ? "border-blue-500 bg-blue-600/20 text-blue-400"
                     : "border-white/[0.08] text-slate-400 hover:border-white/15"
@@ -192,30 +192,30 @@ const AICreatePanel = ({ onFormatChange, onGenerate }: AICreatePanelProps) => {
           </div>
 
           {/* Custom colors */}
-          <div className="flex items-center gap-3 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
+          <div className="flex items-center gap-3 rounded-lg border border-white/[0.06] bg-white/[0.03] px-4 h-12">
             <div
-              className="h-8 w-8 shrink-0 rounded-full"
+              className="h-10 w-10 shrink-0 rounded-full"
               style={{
                 background: `linear-gradient(135deg, ${customColors[0]}, ${customColors[1]})`,
               }}
             />
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Customizado
               </p>
-              <p className="truncate text-xs text-slate-400 font-mono">
+              <p className="truncate text-sm text-slate-400 font-mono">
                 {customColors.join(", ")}
               </p>
             </div>
             <button className="text-slate-500 hover:text-white transition-colors">
-              <Pencil className="h-3.5 w-3.5" />
+              <Pencil className="h-4 w-4" />
             </button>
           </div>
         </section>
 
         {/* DESCRIPTION */}
         <section>
-          <h3 className="mb-3 text-[11px] font-bold uppercase tracking-widest text-slate-500">
+          <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-slate-500">
             Descrição do Projeto
           </h3>
           <textarea
@@ -223,26 +223,26 @@ const AICreatePanel = ({ onFormatChange, onGenerate }: AICreatePanelProps) => {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Descreva o que você deseja criar..."
             rows={4}
-            className="w-full resize-none rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5 text-sm text-slate-300 placeholder:text-slate-600 focus:border-blue-500/50 focus:outline-none focus:ring-0 transition-colors"
+            className="w-full resize-none rounded-lg border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-base text-slate-300 placeholder:text-slate-600 focus:border-blue-500/50 focus:outline-none focus:ring-0 transition-colors"
           />
         </section>
       </div>
 
       {/* GENERATE BUTTON - Fixed bottom */}
-      <div className="border-t border-white/[0.06] p-4">
+      <div className="border-t border-white/[0.06] p-6">
         <button
           onClick={handleGenerate}
           disabled={isGenerating}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition-all hover:shadow-blue-600/30 hover:brightness-110 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="flex w-full items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-4 h-14 text-lg font-bold text-white shadow-lg shadow-blue-600/20 transition-all hover:shadow-blue-600/30 hover:brightness-110 disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {isGenerating ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-5 w-5 animate-spin" />
               Gerando...
             </>
           ) : (
             <>
-              <Sparkles className="h-4 w-4" />
+              <Sparkles className="h-5 w-5" />
               Gerar Variações
             </>
           )}

@@ -63,22 +63,28 @@
     animation: marquee 8s linear infinite;
   }
 
-  /* Custom Scrollbar Styling */
-  .scrollbar-custom::-webkit-scrollbar {
-    width: 8px;
+  /* Custom Scrollbar — thin dark pill style */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
   }
 
-  .scrollbar-custom::-webkit-scrollbar-track {
+  .scrollbar-thin::-webkit-scrollbar-track {
     background: transparent;
   }
 
-  .scrollbar-custom::-webkit-scrollbar-thumb {
-    @apply bg-slate-700 rounded-full;
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full;
   }
 
-  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-600;
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-white/20;
   }
+
+  /* Legacy alias kept for backwards compatibility */
+  .scrollbar-custom::-webkit-scrollbar { width: 6px; }
+  .scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-custom::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full; }
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover { @apply bg-white/20; }
 }
 
 @keyframes marquee {
